@@ -1,4 +1,4 @@
-# PulseFit – Software Architecture Design (Refined Version)
+# PulseFit – Software Architecture Design
 
 ## 1. Overview of Case Study, Organisation, and Process
 
@@ -11,7 +11,7 @@
 - Sleep
 - Calories
 
-The application allows users to monitor their fitness progress, follow structured training plans, and gain insights into their health data over time.
+The application allows users to monitor their fitness progress, follow structured training plans, and gain insights into their health data over time. At this scale, PulseFit becomes a data-intensive platform that requires careful architectural design.
 
 ### Organisation
 
@@ -27,20 +27,18 @@ The PulseFit ecosystem consists of multiple stakeholders:
 
 As the system continuously collects large volumes of time-series data, several issues arise:
 
-- Data from wearable devices may arrive duplicate or out-of-order, affecting accuracy
-- The dashboard is slow, as it recalculates metrics from raw data each time
-- Users may lose historical data when switching devices
-- Training plans are not personalised to user performance
-- There is no support for data export or account deletion, limiting user control
+- Data from wearable devices may arrive **duplicate or out-of-order**, affecting accuracy and user trust
+- The **dashboard is slow**, as it recalculates metrics from raw data each time
+- Users may **lose historical data** when switching devices
+- **Training plans are not personalised** to user performance
+- There is **no support for data export or account deletion**, limiting user control
 
 ### System Process (High-Level Flow)
 
 ```
-Wearable Device → API Gateway → Data Ingestion → Message Queue → 
+Wearable Device → API Gateway → Data Ingestion → Message Queue →
 Processing Service → Database → Analytics → Dashboard
 ```
-
-This pipeline ensures continuous data collection, processing, and visualization.
 
 ---
 
@@ -61,16 +59,13 @@ The system must support the following functionalities:
 
 ### Quality Attributes
 
-To ensure system effectiveness, the following quality attributes are prioritised:
-
 | Attribute | Description |
 |-----------|-------------|
 | **Performance** | The dashboard must load quickly and avoid expensive real-time computations |
 | **Scalability** | The system must handle millions of users and large volumes of time-series data |
+| **Accuracy (Data Integrity)** | The system must prevent duplicate and out-of-order data |
+| **Privacy** | User data must be protected and fully controllable by the user |
 | **Reliability** | Data syncing and processing must be consistent and fault-tolerant |
-| **Data Integrity** | The system must prevent duplicate and incorrect data |
-| **Security & Privacy** | User data must be protected and controllable by the user |
-| **Maintainability** | The system should be modular and easy to extend |
 
 ---
 
@@ -80,74 +75,58 @@ To ensure system effectiveness, the following quality attributes are prioritised
 
 The system involves three main actors:
 
-- **User**
-- **Coach**
-- **Device API**
-
-Key interactions include:
-- Syncing data
-- Viewing dashboards
-- Managing workouts
-- Subscribing to plans
-- Managing personal data
-
-> 👉 *(Insert Use Case Diagram Here)*
+- **User** — Sync data, view dashboard, log workout, subscribe to plan, export data, delete account
+- **Coach** — Create training plan, publish plan
+- **Device API** — Send health data
 
 ### Component Diagram
 
-The architecture is based on a microservices structure with clearly separated components:
+The architecture is based on a microservices structure with the following layers:
 
-1. **Mobile App** (Frontend)
-2. **API Gateway**
-3. **Data Ingestion Service**
-4. **Message Queue**
-5. **Processing Service**
-6. **Time-Series Database**
-7. **User Database**
-8. **Analytics Service**
+**Client Layer**
+- Mobile App (Flutter / React Native)
+- Web Portal
 
-Data flows sequentially through these components, ensuring efficient data handling and processing.
+**API Layer**
+- API Gateway — routes all incoming requests via REST API
 
-> 👉 *(Insert Component Diagram Here)*
+**Service Layer**
+- Data Ingestion Service — handles deduplication and timestamp ordering
+- Auth Service — manages authentication and authorisation
 
-### Architecture Overview
+**Messaging**
+- Message Queue (Kafka / RabbitMQ) — decouples ingestion from processing
 
-The system adopts a **Microservices Architecture** combined with a **Message Queue** to support scalability and reliability.
+**Processing**
+- Processing Service — consumes events from the queue, applies business logic
 
-Incoming data is asynchronously processed through the queue, reducing system load and ensuring smooth data handling even under high traffic.
+**Data Layer**
+- Time-Series Database (InfluxDB) — stores sensor data efficiently
+- User Database (PostgreSQL) — stores structured user and plan data
+
+**Analytics**
+- Analytics Service — pre-aggregates summaries, feeds the dashboard
+- Cache (Redis) — stores pre-computed dashboard data for fast access
 
 ---
 
 ## 4. Selected Tactics to Enhance Quality Attributes
 
-To address system challenges, several architectural tactics are applied:
+### Data Quality — Duplicate Data
+- **Unique ID per data point** — each sensor reading is tagged with a unique identifier so duplicates can be detected and rejected at ingestion
+
+### Data Quality — Out-of-Order Data
+- **Timestamp-based sorting** — the Data Ingestion Service reorders events by their device timestamp before processing
 
 ### Performance
-
-- **Caching** reduces repeated data computation
-- **Pre-computation of summaries** improves dashboard speed
-
-### Data Integrity
-
-- **Deduplication** removes repeated data entries
-- **Timestamp ordering** ensures correct data sequence
+- **Pre-aggregation** — summaries (daily, weekly, monthly) are computed in advance and stored in cache
+- **Redis cache** — the dashboard reads from cache instead of querying raw data each time
 
 ### Scalability
-
-- **Microservices architecture** allows independent scaling of components
-- **Load balancing** distributes traffic efficiently
+- **Message Queue (Kafka)** — asynchronous processing decouples ingestion from downstream services, allowing each component to scale independently
 
 ### Reliability
-
-- **Message Queue** ensures data is not lost during processing
-- **Retry and idempotent processing** handle failures safely
-
-### Security & Privacy
-
-- **Encryption** protects sensitive health data
-- **Authentication & Authorization** ensure secure access
-
-These tactics directly improve system quality and align with the identified quality attributes.
+- **Retry and idempotent processing** — failed messages are retried safely without creating duplicates
 
 ---
 
@@ -155,24 +134,26 @@ These tactics directly improve system quality and align with the identified qual
 
 ### Technology Stack
 
-| Layer | Technology Options |
-|-------|-------------------|
+| Layer | Technology |
+|-------|-----------|
 | **Frontend** | Flutter / React Native |
 | **Backend** | Node.js / Java (Spring Boot) |
-| **Database** | InfluxDB (Time-Series Data) / PostgreSQL (User Data) |
+| **Time-Series Database** | InfluxDB |
+| **Relational Database** | PostgreSQL |
 | **Messaging** | Kafka / RabbitMQ |
+| **Batch Processing** | Apache Spark |
+| **Cache** | Redis |
 | **Cloud** | AWS / GCP |
 | **API** | REST / GraphQL |
 
 ### Justification of Decisions
 
-- **Kafka** supports high-throughput real-time data ingestion
-- **InfluxDB** is optimized for time-series sensor data
-- **PostgreSQL** efficiently manages structured user data
-- **Cloud platforms** provide scalability, reliability, and availability
-- **Microservices architecture** enables flexibility, maintainability, and independent deployment
-
-These technical decisions ensure the system meets performance, scalability, and reliability requirements.
+- **Kafka** supports high-throughput real-time data ingestion and decouples services
+- **InfluxDB** is optimised for time-series sensor data with efficient compression and querying
+- **PostgreSQL** efficiently manages structured user, coach, and plan data
+- **Apache Spark** enables batch processing for large-scale analytics and pre-aggregation jobs
+- **Redis** provides fast in-memory cache for pre-computed dashboard summaries
+- **Cloud platforms (AWS / GCP)** provide scalability, reliability, and managed infrastructure
 
 ---
 
@@ -180,10 +161,8 @@ These technical decisions ensure the system meets performance, scalability, and 
 
 The proposed architecture effectively addresses the challenges in PulseFit by:
 
-✅ Improving system performance and dashboard responsiveness  
-✅ Supporting scalability for a large user base  
-✅ Ensuring accurate and reliable data processing  
-✅ Enabling personalised training experiences  
-✅ Providing strong data privacy and user control  
-
-This design aligns with both functional requirements and quality attributes, making it suitable for a large-scale fitness tracking platform.
+- Improving system **performance** and dashboard responsiveness through pre-aggregation and caching
+- Supporting **scalability** for 1.2 million+ users via microservices and Kafka
+- Ensuring **accurate and reliable** data through unique ID deduplication and timestamp sorting
+- Enabling **personalised** training experiences through adaptive algorithms
+- Providing strong **privacy and data control** through export and delete features
