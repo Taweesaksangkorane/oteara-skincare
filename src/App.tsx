@@ -87,7 +87,7 @@ export default function App() {
           }
         ]
       },
-      image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=800", // White treatment tube as seen in Ancestral Set
+      image: "/images/1.png", // White treatment tube as seen in Ancestral Set
     },
     {
       id: "ageless",
@@ -143,7 +143,7 @@ export default function App() {
           }
         ]
       },
-      image: "https://images.unsplash.com/photo-1631730359585-38a4935ccbb2?auto=format&fit=crop&q=80&w=800", // Dark lid glass jar as seen in Ancestral Set
+      image: "/images/2.png", // Dark lid glass jar as seen in Ancestral Set
     },
     {
       id: "daily",
@@ -199,7 +199,7 @@ export default function App() {
           }
         ]
       },
-      image: "https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&q=80&w=800" // Clear spray bottle with white head as seen in Ancestral Set
+      image: "/images/3.png" // Clear spray bottle with white head as seen in Ancestral Set
     }
   ];
 
@@ -354,7 +354,7 @@ export default function App() {
           <div className="w-full aspect-[21/9] rounded-[3rem] overflow-hidden bg-neutral-200 shadow-2xl relative group">
             {/* User uploaded image placeholder: OTEARA Ancestral High-Tea Set with green botanical box */}
             <img 
-              src="https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&q=80&w=1200" 
+              src="/images/0.png" 
               alt="OTEARÀ Essential Set - White eye cream tube, clear hair serum spray, and dark-lidded facial jars in a luxury presentation" 
               className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
             />
