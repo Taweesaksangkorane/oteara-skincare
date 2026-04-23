@@ -45,15 +45,15 @@ export default function App() {
       description: "A nourishing eye cream designed to visibly brighten and revitalize the delicate eye area. Formulated with Assam tea extract, niacinamide, and ceramides, it helps improve the appearance of dullness while supporting skin hydration and barrier function.",
       active: ["Thai Assam tea extract", "Ceramides", "Niacinamide"],
       benefits: [
-        { ingredient: "6% Niacinamide", effect: "Brightens dark circles and refines delicate skin texture." },
+        { ingredient: "Niacinamide", effect: "Brightens dark circles and refines delicate skin texture." },
         { ingredient: "Thai Assam tea extract", effect: "Potent antioxidants neutralize free radicals to revitalize tired eyes." },
         { ingredient: "Ceramide Complex", effect: "Restores the lipid barrier to prevent moisture loss and sagging." },
         { ingredient: "Sodium Hyaluronate", effect: "Plumps and hydrates to minimize the appearance of fine lines." }
       ],
-      ingredients: "Aqua, Niacinamide, Cetyl alcohol, C15-19 Alkane, Isononyl isononanoate, Caprylyl /capric triglyceride, Glycerin, Cetearyl alcohol, Jojoba esters, Butylene glycol, Sodium hyaluronate, Camellia sinesis var. assamica leaf extract, Carbomer, Disodium EDTA, Maltodextrin, Propanediol, Sorbitol, Xanthan gum, PEG-20 methyl glucose sesquistearate, Methyl glucose sesquistearate, Sodium lauroyl lactylate, Laureth-4, Mineral oil, Prunus Amygdalus Dulcis Oil/Sweet Almond Oil, Behentrimonium methosulfate, Tocopheryl acetate, Triethanolamine, Hexyldecanol, Pentylene glycol, Hydrogenated lecithin, Phytosterols, Ceramide NP, 1,2-Hexanediol, Phytosteryl/ octyldodecyl lauroyl glutamate, Ceramide AP, Ceramide EOP, Phenoxyethanol, Ethylhexylglycerin, Fragrance",
+      ingredients: "Ingredients - Aqua, Cetyl alcohol, C12-15 Alkyl benzoate, Niacinamide, Caprylic /capric triglyceride, Glyceryl stearate, Glycerin, PEG-100 Stearate, Propanediol, Isononyl isononanoate, Jojoba esters, C15-19 Alkane, Camellia sinesis var. assamica leaf extract, Cetearyl alcohol, Butylene glycol, Sodium hyaluronate, Carbomer, Disodium EDTA, Maltodextrin, Sorbitol, Xanthan gum, Mineral oil, Prunus Amygdalus Dulcis Oil/Sweet Almond Oil, Behentrimonium methosulfate, Tocopheryl acetate, Triethanolamine, Hexyldecanol, Pentylene glycol, Hydrogenated lecithin, Phytosterols, Ceramide NP, 1,2-Hexanediol, Phytosteryl/ octyldodecyl lauroyl glutamate, Ceramide AP, Ceramide EOP, Phenoxyethanol, Ethylhexylglycerin, Fragrance",
       warning: "For external use only. Avoid direct contact with eyes and use with care for sensitive skin. Discontinue use if irritation occurs. Keep out of reach of children.",
       directions: "Apply a very small amount around the eye area using your ring finger. Gently massage until fully absorbed. Use morning and evening.",
-      storage: "Store in a cool, dry place away from direct sunlight.",
+      storage: "Store in a cool, dry place away from direct sunlight, keep it under 45°C.",
       mfg: "18/04/2026",
       exp: "18/04/2028",
       pao: "12 M",
@@ -100,7 +100,7 @@ export default function App() {
       ],
       size: "50 g / 1.69 oz",
       description: "A lightweight daily moisturizer formulated to hydrate and help protect the skin from environmental stressors and UV exposure with 6.2 SPF. Enriched with Thai-grown Assam tea, ceramides, and niacinamide, it helps support the skin barrier while improving overall skin appearance for a smoother, healthier-looking complexion.",
-      active: ["Thai Assam tea extract", "Ceramides", "Niacinamide", "Titanium dioxide", "Octisalate"],
+      active: ["Thai Assam tea extract", "Ceramides", "Niacinamide", "Titanium dioxide", "Octisalate","Sodium hyaluronate"],
       benefits: [
         { ingredient: "Thai Assam tea extract", effect: "Fortifies skin defense against oxidative stress and urban pollution." },
         { ingredient: "Mineral SPF (Titanium Dioxide)", effect: "Reflects harmful UV rays to prevent premature photo-aging." },
@@ -210,12 +210,12 @@ export default function App() {
       
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-secondary/80 backdrop-blur-md border-b border-primary/5">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 min-h-16 py-3 md:py-0 flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-0">
           <div className="font-serif text-2xl font-bold tracking-tight text-dark-green">OTEARÀ</div>
-          <div className="hidden md:flex gap-8 text-[10px] uppercase tracking-widest text-primary/60">
-            <a href="#glow" className="hover:text-primary transition-colors">Benchmark</a>
-            <a href="#ageless" className="hover:text-primary transition-colors">Skincare</a>
-            <a href="#daily" className="hover:text-primary transition-colors">Haircare</a>
+          <div className="flex gap-3 md:gap-8 text-[10px] uppercase tracking-widest text-primary/60 overflow-x-auto whitespace-nowrap pb-1 md:pb-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <a href="#glow" className="hover:text-primary transition-colors shrink-0">Benchmark</a>
+            <a href="#ageless" className="hover:text-primary transition-colors shrink-0">Skincare</a>
+            <a href="#daily" className="hover:text-primary transition-colors shrink-0">Haircare</a>
           </div>
         </div>
       </nav>
@@ -261,7 +261,7 @@ export default function App() {
                 </div>
                 <span className="text-[10px] uppercase tracking-widest opacity-40 group-hover:opacity-100 transition-opacity">Discover more</span>
               </div>
-              <h3 className="text-2xl font-serif mb-4">Muslim Friendly Formula</h3>
+              <h3 className="text-2xl font-serif mb-4">Muslim friendly Consideration</h3>
               <AnimatePresence>
                 {selectedFeature === 'muslim' ? (
                   <motion.p 
@@ -328,7 +328,7 @@ export default function App() {
                     exit={{ height: 0, opacity: 0 }}
                     className="text-sm leading-relaxed text-primary/70 italic"
                   >
-                    Our secondary packaging is crafted from agricultural waste bonded with the mycelium of Black Bhutanese Mushrooms (<i>Pleurotus ostreatus</i>)—a carbon-negative alternative to plastic. Each box is cushioned with dried Water Hyacinth (<i>Pontederia crassipes</i>), harvested locally to restore river clarity while providing 100% biodegradable protection.
+                    Our secondary packaging is crafted from agricultural waste bonded with the mycelium of Black Bhutanese Mushrooms (<i>Pleurotus ostreatus</i>)—a alternative to plastic. Each box is cushioned with dried Water Hyacinth (<i>Pontederia crassipes</i>), harvested locally to restore river clarity while providing 100% biodegradable protection.
                   </motion.p>
                 ) : (
                   <p className="text-sm text-primary/50">Bio-grown packaging with zero-waste cushioning.</p>
